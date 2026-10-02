@@ -1,0 +1,48 @@
+READING BACKLOG — UNREAD ARTICLES & REPORTS
+Flagged by Maya (EA to CFO), 08:05am (see inbox #4 in 02_inbox.xlsx)
+
+--- 1. Central Bank of Uzbekistan Tightens Cross-Border Data Rules ---
+(Industry brief, saved 2 weeks ago)
+Uzbekistan's central bank issued updated guidance this month on
+cross-border data transfers for financial institutions, tightening
+requirements around customer data localization and third-party data
+sharing agreements. Banks operating in or acquiring Uzbek entities will
+need signed data sharing agreements in place before any customer data can
+move across borders, and are expected to designate a local data
+protection contact. Analysts say the rules are aimed at foreign-owned
+banks completing acquisitions of local players, a category that has grown
+over the past two years as regional consolidation picks up.
+
+--- 2. The Rise of AI Copilots in Retail Banking ---
+(Trade publication feature, saved 10 days ago)
+Retail banks are increasingly deploying AI copilots for both customers and
+staff — from chatbots that handle account questions to internal tools
+that help relationship managers prep for client meetings. Early adopters
+report meaningful time savings, but also flag a common failure mode:
+copilots that are functional but not trusted, because staff can't tell
+when the tool is confident versus guessing. The piece profiles three
+banks that solved this by surfacing a visible confidence signal alongside
+AI-generated answers.
+
+--- 3. Regional Banking M&A: What's Next for Central Asia ---
+(Market analysis, saved 1 week ago)
+Consolidation among Central Asian banks has accelerated, with several
+cross-border acquisitions closing this year as larger regional players
+look to expand beyond saturated home markets. The analysis flags
+integration speed as the biggest determinant of deal success — acquirers
+that move fast on rebranding and systems migration retain more customers
+than those that let integration drag past six months.
+
+--- 4. Q3 Fintech Funding Roundup ---
+(Newsletter digest, saved 3 days ago)
+A brief roundup of the quarter's notable fintech funding rounds, with a
+short note on AI-native banking startups pulling an increasing share of
+early-stage capital compared to last year.
+
+--- 5. Internal Memo: Notification System Technical Debt ---
+(Forwarded by an eng lead, saved 5 days ago — see also 06_slack_messages.txt,
+#eng-leads)
+A short internal write-up flagging that the notification system's
+technical debt is growing. Not urgent enough to block anything this
+quarter, but the author recommends addressing it before more features are
+built on top of it.

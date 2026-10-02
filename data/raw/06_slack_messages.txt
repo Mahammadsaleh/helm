@@ -1,0 +1,49 @@
+SLACK MESSAGES — MULTIPLE CHANNELS
+
+#exec-assistants
+[07:38] Maya (EA to CFO): heads up CEO's assistant is out sick today, flagging
+in case anyone needs coverage on scheduling
+[08:07] Maya: also dropped the unread reading backlog in your inbox
+(07_reading_backlog.txt) — no rush, thought a podcast-style summary might
+be handy for the commute
+
+#eng-leads
+[08:05] Tom (Eng Lead): notification system tech debt ticket is growing,
+not blocking anything this week but wanted it on record before Q3 wraps
+
+#sales
+[08:22] Marcus: pushing my 1:1 with CEO to 9:45, posted here in case anyone
+needs the room before then
+[10:42] Marcus: Acme deal update — legal redlines back, looks close to
+signing this week 🎉
+
+#general
+[09:58] Priya: heads up team, roadmap review ran long, CEO might be a couple
+min late to whatever's next
+[11:47] Lena: on the TechCorp call now, will report back
+[12:05] Lena: 🎉 TechCorp staying, more details soon
+
+#exec-assistants
+[12:15] Maya: reminder — board chair Richard leaves for airport around 6,
+flight at 7, if CEO needs anything printed/signed before then let me know
+
+#comms
+[12:03] Jordan: journalist thing is real, drafting a statement now, will
+send to CEO for approval before anything goes out
+[13:16] Jordan: draft sent to CEO's email, need a decision before ~3pm to
+hit the 4pm deadline comfortably
+[16:20] Jordan: still haven't heard back on the statement, deadline is 4pm,
+getting tight — can someone confirm CEO has seen it?
+
+#eng-leads
+[13:50] Priya: final round with Aisha went really well, references are
+excellent, I'd move on an offer this week if we can
+
+#general
+[15:12] Sarah (CFO): correction on Davr Bank integration numbers is in
+CEO's inbox, flagging here too in case the one-pager for Richard is
+already in progress
+
+#exec-assistants
+[16:40] Maya: does the board chair have his one-pager yet? he's asking me
+directly now and I don't have visibility

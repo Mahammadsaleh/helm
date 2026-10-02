@@ -11,7 +11,9 @@
     "typecheck": "tsc --noEmit",
     "qa": "playwright test",
     "import:xlsx": "tsx scripts/import-xlsx.ts",
-    "analyze": "tsx --conditions=react-server scripts/analyze.ts"
+    "analyze": "tsx --conditions=react-server scripts/analyze.ts",
+    "walkthrough": "tsx scripts/record-walkthrough.ts",
+    "narrate": "node scripts/narrate-walkthrough.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.71",

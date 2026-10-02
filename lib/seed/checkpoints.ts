@@ -199,7 +199,7 @@ export const SEED_CHECKPOINTS: Checkpoint[] = [
           id: "al-late-morning",
           kind: "conflict",
           title: "Late morning is triple-booked",
-          detail: "Three meetings overlap each other and the Davr call. Helm proposes one move and one deferral.",
+          detail: "Three meetings overlap each other and the Davr call. Helm proposes two moves and one deferral.",
           sourceIds: ["ev-davr", "ev-q3close", "ev-reorg", "ev-sme"],
         },
         {

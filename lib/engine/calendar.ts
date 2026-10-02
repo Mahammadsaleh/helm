@@ -65,7 +65,7 @@ export type Feasibility =
 
 export function feasibility(d: Decision, events: PlannedEvent[], now: HHMM): Feasibility {
   if (!d.dueAt) return { state: "no-deadline" };
-  if (toMin(d.dueAt) < toMin(now)) return { state: "overdue" };
+  if (toMin(d.dueAt) <= toMin(now)) return { state: "overdue" };
   const free = freeMinutes(events, now, d.dueAt, d.id);
   if (free >= d.effortMin) return { state: "ok", free };
   return { state: "infeasible", free, nextFree: nextFreeSlot(events, now, d.effortMin) };

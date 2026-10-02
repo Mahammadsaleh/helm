@@ -30,6 +30,12 @@ describe("calendar", () => {
     expect(nextFreeSlot(base, "13:16", 10)).toBe("16:30");
   });
 
+  it("treats a decision as past due once its deadline is reached", () => {
+    const d = SEED_CHECKPOINTS.find((c) => c.id === "1512")!.output.decisions.find((x) => x.id === "dec-onepager-send")!;
+    expect(feasibility(d, base, "16:59").state).toBe("infeasible");
+    expect(feasibility(d, base, "17:00").state).toBe("overdue");
+  });
+
   it("makes the press decision feasible once Helm's two changes are accepted", () => {
     const cp = SEED_CHECKPOINTS.find((c) => c.id === "1316")!;
     const planned = applyPlan(day.events, cp.output.planChanges);

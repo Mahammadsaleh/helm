@@ -159,6 +159,12 @@ test.describe("dark mode", () => {
   });
 });
 
+test("tab names start with their label, so badges don't lead the announcement", async ({ page }) => {
+  await open(page, "t=1316");
+  for (const name of ["Today", "Decide", "One-pager", "Feed"]) await expect(tab(page, name)).toBeVisible();
+  await expect(tab(page, "Decide")).toHaveAccessibleName(/^Decide, \d+ need you$/);
+});
+
 test("clock controls move through checkpoints and keep the URL in sync", async ({ page }) => {
   const errors = await open(page, "t=0800");
   await expect(app(page).getByText("Before the first analysis")).toBeVisible();

@@ -30,13 +30,14 @@ const TABS: { id: Tab; label: string; icon: Icon }[] = [
 ];
 
 export function HelmApp() {
-  const { url } = useHelm();
+  const { url, view } = useHelm();
   const scroller = useRef<HTMLElement>(null);
   const maya = url.as === "maya";
+  const checkpointId = view.checkpoint?.id;
 
   useEffect(() => {
     scroller.current?.scrollTo({ top: 0 });
-  }, [url.tab, url.as]);
+  }, [url.tab, url.as, url.path, checkpointId]);
 
   return (
     <div className="relative flex h-full min-h-0 flex-col overflow-hidden bg-canvas">
@@ -158,6 +159,13 @@ function TabBar() {
                 type="button"
                 onClick={() => setUrl({ tab: t.id })}
                 aria-current={active ? "page" : undefined}
+                aria-label={[
+                  t.label,
+                  badge && (t.id === "decide" ? `${badge} need you` : `${badge} new since analysis`),
+                  t.id === "onepager" && onePagerDot && "updated",
+                ]
+                  .filter(Boolean)
+                  .join(", ")}
                 className={cx(
                   "relative flex h-14 w-full flex-col items-center justify-center gap-0.5 text-[11px] font-medium transition-colors",
                   active ? "text-ink" : "text-muted hover:text-body",
@@ -166,17 +174,18 @@ function TabBar() {
                 <span className="relative">
                   <Glyph size={22} weight={active ? "fill" : "regular"} aria-hidden="true" />
                   {badge && (
-                    <span className="tnum absolute -right-2.5 -top-1.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-ink px-1 text-[10px] font-semibold text-on-accent">
+                    <span
+                      aria-hidden="true"
+                      className="tnum absolute -right-2.5 -top-1.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-ink px-1 text-[10px] font-semibold text-on-accent"
+                    >
                       {badge}
                     </span>
                   )}
                   {t.id === "onepager" && onePagerDot && (
-                    <span className="absolute -right-1 -top-0.5 size-2 rounded-full bg-accent ring-2 ring-canvas" />
+                    <span aria-hidden="true" className="absolute -right-1 -top-0.5 size-2 rounded-full bg-accent ring-2 ring-canvas" />
                   )}
                 </span>
                 {t.label}
-                {badge && <span className="sr-only">, {t.id === "decide" ? `${badge} need you` : `${badge} new since analysis`}</span>}
-                {t.id === "onepager" && onePagerDot && <span className="sr-only">, updated</span>}
               </button>
             </li>
           );

@@ -494,7 +494,7 @@ export const SEED_CHECKPOINTS: Checkpoint[] = [
           id: "al-press-early",
           kind: "risk",
           title: "A press statement is on its way to you",
-          detail: "Jordan says a journalist inquiry is real and a draft is coming for your approval. You are booked from 13:15 to 16:30, so Helm will find time when the draft lands.",
+          detail: "Jordan says a journalist inquiry is real and a draft is coming for your approval. Your afternoon is back to back, so Helm will find time when the draft lands.",
           sourceIds: ["sl-1203"],
         },
         {
@@ -525,7 +525,7 @@ export const SEED_CHECKPOINTS: Checkpoint[] = [
     generatedBy: "seed",
     output: {
       headline:
-        "The press statement needs your decision by about 15:00, and you are booked until 16:30. Helm found time before the roundtable.",
+        "A reporter wants comment on a layoffs rumor by 16:00, and comms needs your decision by about 15:00. Your afternoon is back to back.",
       decisions: [
         {
           id: "dec-press",
@@ -632,13 +632,6 @@ export const SEED_CHECKPOINTS: Checkpoint[] = [
       facts: [F.nii, F.costIncome, F.ai, F.acmeUpdated, F.techcorp, F.attritionUpdated, F.competition, F.techDebt, F.capital, F.dsa, F.callHeld, F.cbu, F.rumor, F.statementPending, F.itHeadcount],
       triage: triageFor(AT_1316),
       alerts: [
-        {
-          id: "al-press-time",
-          kind: "deadline",
-          title: "No time for the press decision without a change",
-          detail: "Jordan needs your decision by about 15:00 and the reporter's deadline is 16:00. You are booked from 13:15 to 16:30.",
-          sourceIds: ["sl-1316", "em-25", "ev-roundtable"],
-        },
         {
           id: "al-default-send",
           kind: "contradiction",

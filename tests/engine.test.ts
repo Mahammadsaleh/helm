@@ -38,6 +38,19 @@ describe("calendar", () => {
     expect(freeMinutes(planned, "13:16", "15:00", "dec-press")).toBe(14);
   });
 
+  it("offers a one-tap fix that includes moving the overlapping roundtable", () => {
+    const user = acceptEarlier(EMPTY_USER_STATE, SEED_CHECKPOINTS, "13:16");
+    const before = computeView(day, SEED_CHECKPOINTS, "13:16", user, "helm");
+    const press = before.decisionsOpen.find((d) => d.id === "dec-press")!;
+    expect(press.feasibility.state).toBe("infeasible");
+    expect(press.fixChangeIds).toEqual(expect.arrayContaining(["pc-press-block", "pc-roundtable-late"]));
+
+    const planChanges = { ...user.planChanges };
+    for (const id of press.fixChangeIds!) planChanges[id] = "accepted" as const;
+    const after = computeView(day, SEED_CHECKPOINTS, "13:16", { ...user, planChanges }, "helm");
+    expect(after.decisionsOpen.find((d) => d.id === "dec-press")!.feasibility.state).toBe("ok");
+  });
+
   it("delegated and deferred events stop counting as busy", () => {
     const planned = applyPlan(day.events, [
       change({ id: "a", action: "delegate", eventId: "ev-q3close", delegateTo: "sarah" }),

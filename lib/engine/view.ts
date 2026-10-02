@@ -20,7 +20,8 @@ export type Path = "helm" | "default";
 
 export interface DecisionView extends Decision {
   feasibility: Feasibility;
-  fixChangeId: string | null;
+  /** Open proposals that, accepted together, make the deadline feasible. */
+  fixChangeIds: string[] | null;
 }
 
 export interface View {
@@ -96,8 +97,9 @@ export function computeView(
   const decisionsOpen: DecisionView[] = (out?.decisions ?? [])
     .filter((d) => !user.decisions[d.id])
     .map((d) => {
-      const fix = proposals.find((p) => p.forDecisionId === d.id) ?? null;
-      return { ...d, feasibility: feasibility(d, events, now), fixChangeId: fix?.id ?? null };
+      const f = feasibility(d, events, now);
+      const fixChangeIds = f.state === "infeasible" ? fixFor(d, proposals, uniqueAccepted, day, events, now) : null;
+      return { ...d, feasibility: f, fixChangeIds };
     })
     .sort((a, b) => toMin(a.dueAt ?? "23:59") - toMin(b.dueAt ?? "23:59"));
 
@@ -141,6 +143,30 @@ export function computeView(
     triage,
     guard: out ? guardOutput(out, sourceLookup(day)) : [],
   };
+}
+
+/**
+ * A time block reserved for the decision, plus any proposed change that moves a
+ * meeting out of that block. Returned only if the result actually fits.
+ */
+function fixFor(
+  d: Decision,
+  proposals: PlanChange[],
+  accepted: PlanChange[],
+  day: Day,
+  events: PlannedEvent[],
+  now: HHMM,
+): string[] | null {
+  const blocks = proposals.filter((p) => p.forDecisionId === d.id && p.start && p.end);
+  if (!blocks.length) return null;
+  const clearing = proposals.filter((p) => {
+    if (p.action === "add" || !p.eventId) return false;
+    const e = events.find((x) => x.id === p.eventId);
+    return Boolean(e) && blocks.some((b) => toMin(e!.start) < toMin(b.end!) && toMin(b.start!) < toMin(e!.end));
+  });
+  const fix = [...blocks, ...clearing];
+  const trial = applyPlan(day.events, [...accepted, ...fix]);
+  return feasibility(d, trial, now).state === "ok" ? fix.map((p) => p.id) : null;
 }
 
 /**

@@ -2,7 +2,7 @@
 /**
  * Voices the walkthrough with ElevenLabs and lays every line onto the video at its start time.
  *
- *   ELEVENLABS_API_KEY=… ELEVENLABS_VOICE_ID=… node narrate.mjs [folder]
+ *   ELEVENLABS_API_KEY=… ELEVENLABS_VOICE_ID=… node narrate.mjs [folder] [--clips-only]
  *
  * The folder holds the video and narration_segments.json: by default the folder this file
  * sits in, or $OUT. Clips are saved as clips/001.mp3, 002.mp3, … and reused on the next run,
@@ -11,6 +11,7 @@
  * slot is sped up just enough to finish before the next line starts.
  *
  * Writes helm_walkthrough_narrated.mp4, narration.m4a and transcript_narrated.srt.
+ * --clips-only stops after voicing, so the clips can be checked before mixing.
  * Optional: ELEVENLABS_MODEL_ID (default eleven_multilingual_v2), VIDEO (path to the video).
  * Needs Node 18+ and ffmpeg.
  */
@@ -27,9 +28,12 @@ const MODEL_ID = process.env.ELEVENLABS_MODEL_ID ?? "eleven_multilingual_v2";
 const GAP = 0.15;
 const CLIP_TYPES = [".mp3", ".wav", ".m4a", ".ogg", ".flac"];
 
+const args = process.argv.slice(2);
+const CLIPS_ONLY = args.includes("--clips-only");
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dir = path.resolve(
-  process.argv[2] ?? (existsSync(path.join(here, "narration_segments.json")) ? here : (process.env.OUT ?? "/tmp/helm-walkthrough")),
+  args.find((a) => !a.startsWith("--")) ??
+    (existsSync(path.join(here, "narration_segments.json")) ? here : (process.env.OUT ?? "/tmp/helm-walkthrough")),
 );
 const clipsDir = path.join(dir, "clips");
 
@@ -84,21 +88,24 @@ async function speak(segments, i) {
   }
 }
 
-function subtitleChunks(text, max = 14) {
-  const chunks = [];
-  let current = [];
+/** Splits a line into subtitle-sized pieces at clause breaks; longer clauses split evenly. */
+function subtitleChunks(text, max = 16) {
+  const clauses = [[]];
   for (const word of text.split(/\s+/)) {
-    current.push(word);
-    const sentenceEnd = /[.?!:;]$/.test(word) && current.length >= 4;
-    const clauseEnd = /,$/.test(word) && current.length >= 9;
-    if (current.length >= max || sentenceEnd || clauseEnd) {
-      chunks.push(current);
-      current = [];
-    }
+    clauses[clauses.length - 1].push(word);
+    if (/[.?!:;,]$/.test(word)) clauses.push([]);
   }
-  if (current.length && current.length < 3 && chunks.length) chunks[chunks.length - 1].push(...current);
-  else if (current.length) chunks.push(current);
-  return chunks.map((c) => c.join(" "));
+  const chunks = [];
+  for (const clause of clauses.filter((c) => c.length)) {
+    const last = chunks[chunks.length - 1];
+    const fits = last && last.length + clause.length <= max;
+    if (fits && (!/[.?!]$/.test(last[last.length - 1]) || last.length < 4 || clause.length < 3)) last.push(...clause);
+    else chunks.push([...clause]);
+  }
+  return chunks.flatMap((c) => {
+    const size = Math.ceil(c.length / Math.ceil(c.length / max));
+    return Array.from({ length: Math.ceil(c.length / size) }, (_, i) => c.slice(i * size, (i + 1) * size).join(" "));
+  });
 }
 
 function srtTime(s) {
@@ -118,8 +125,6 @@ async function main() {
   const manifest = path.join(dir, "narration_segments.json");
   if (!existsSync(manifest)) fail(`No narration_segments.json in ${dir}. Pass the walkthrough folder as the first argument.`);
   const { video: videoName, duration: videoDuration, segments } = JSON.parse(readFileSync(manifest, "utf8"));
-  const video = findVideo(videoName);
-  const duration = videoDuration ?? probeDuration(video);
   mkdirSync(clipsDir, { recursive: true });
 
   const missing = segments.filter((s) => !findClip(s));
@@ -145,7 +150,7 @@ async function main() {
   const placed = segments.map((segment) => {
     const file = findClip(segment);
     const length = probeDuration(file);
-    const room = Math.max(0.5, segment.slot - GAP);
+    const room = segment.slot == null ? Infinity : Math.max(0.5, segment.slot - GAP);
     const tempo = length > room ? length / room : 1;
     return { ...segment, file, length, tempo, spoken: length / tempo };
   });
@@ -155,7 +160,13 @@ async function main() {
     const note = p.tempo > 1.15 ? "  (noticeable: try a faster voice or regenerate this line)" : "";
     console.log(`Line ${p.line} runs ${(p.length - p.spoken).toFixed(1)}s long, sped up ${Math.round((p.tempo - 1) * 100)}%${note}`);
   }
+  if (CLIPS_ONLY) {
+    console.log(`\n${placed.length} clips ready in ${clipsDir}. Run again without --clips-only to mix them onto the video.`);
+    return;
+  }
 
+  const video = findVideo(videoName);
+  const duration = videoDuration ?? probeDuration(video);
   const filters = placed.map((p, i) => {
     const chain = ["aresample=44100", "aformat=channel_layouts=stereo"];
     if (p.tempo > 1) chain.push(...atempoChain(p.tempo));
@@ -164,7 +175,7 @@ async function main() {
   });
   filters.push(
     `${placed.map((_, i) => `[a${i}]`).join("")}amix=inputs=${placed.length}:normalize=0:dropout_transition=0,` +
-      `apad=whole_dur=${duration.toFixed(3)},asplit=2[withvideo][alone]`,
+      `loudnorm=I=-16:TP=-1.5:LRA=11,aresample=44100,apad=whole_dur=${duration.toFixed(3)},asplit=2[withvideo][alone]`,
   );
 
   const narrated = path.join(dir, "helm_walkthrough_narrated.mp4");

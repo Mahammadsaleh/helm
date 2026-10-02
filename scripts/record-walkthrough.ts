@@ -6,16 +6,23 @@
  *   pnpm build && pnpm start --port 3100
  *   BASE_URL=http://localhost:3100 OUT=/tmp/helm-walkthrough pnpm walkthrough
  *
+ * CUT=short records the highlights in under two minutes instead of all 16 steps.
  * FAST=1 runs the same flow at speed without recording, to check the selectors.
+ * SCRIPT_ONLY=1 writes just narration_segments.json, so the voice can be made first;
+ * VOICE_CLIPS=dir then holds each shot until its clip (001.mp3, …) has finished.
  */
 import { chromium, type FrameLocator, type Locator, type Page } from "@playwright/test";
 import { spawnSync } from "node:child_process";
-import { copyFileSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3100";
 const OUT = path.resolve(process.env.OUT ?? "/tmp/helm-walkthrough");
 const FAST = process.env.FAST === "1";
+const SCRIPT_ONLY = process.env.SCRIPT_ONLY === "1";
+const VOICE_CLIPS = process.env.VOICE_CLIPS ? path.resolve(process.env.VOICE_CLIPS) : null;
+/** Breathing room after a recorded voice clip before the next line starts. */
+const PAUSE_AFTER_CLIP = 0.45;
 const VIEWPORT = { width: 1536, height: 864 };
 const SCALE = 1.25;
 /** Slightly slower than a typical TTS voice, so each line finishes before the next one starts. */
@@ -338,11 +345,38 @@ async function jumpTo(t: string) {
   await waitForTime(t);
 }
 
+async function dragClockTo(target: number) {
+  const slider = left().getByRole("slider", { name: "Scenario time" });
+  await reveal(slider, "center", 12, true);
+  const b = await boxOf(slider);
+  const x = (minutes: number) => b.x + 9 + ((b.width - 18) * (minutes - 480)) / 630;
+  const value = Number(await slider.inputValue());
+  await moveTo(x(value), b.y + b.height / 2);
+  await page.evaluate(() => window.__wt?.press());
+  await page.mouse.down();
+  const steps = 24;
+  for (let i = 1; i <= steps; i++) {
+    const m = value + ((target - value) * i) / steps;
+    await page.evaluate(([x, y]) => window.__wt?.move(x, y, 0), [x(m), b.y + b.height / 2] as const);
+    await page.mouse.move(x(m), b.y + b.height / 2);
+    await sleep(45);
+  }
+  await page.mouse.up();
+  pointer = { x: x(target), y: b.y + b.height / 2 };
+  for (let guard = 0; guard < 40; guard++) {
+    const v = Number(await slider.inputValue());
+    if (v === target) break;
+    await slider.press(v < target ? "ArrowRight" : "ArrowLeft");
+  }
+  const hh = String(Math.floor(target / 60)).padStart(2, "0");
+  await waitForTime(`${hh}:${String(target % 60).padStart(2, "0")}`);
+}
+
 /* ---------- the walkthrough ---------- */
 
 let frame: FrameLocator;
 
-const SCENES: Scene[] = [
+const FULL_SCENES: Scene[] = [
   {
     title: "Meet Helm",
     beats: [
@@ -1063,30 +1097,7 @@ const SCENES: Scene[] = [
       {
         say: "Let's drag the clock to five o'clock.",
         do: async () => {
-          const slider = left().getByRole("slider", { name: "Scenario time" });
-          await reveal(slider, "center", 12, true);
-          const b = await boxOf(slider);
-          const x = (minutes: number) => b.x + 9 + ((b.width - 18) * (minutes - 480)) / 630;
-          const value = Number(await slider.inputValue());
-          await moveTo(x(value), b.y + b.height / 2);
-          await page.evaluate(() => window.__wt?.press());
-          await page.mouse.down();
-          const target = 17 * 60;
-          const steps = 24;
-          for (let i = 1; i <= steps; i++) {
-            const m = value + ((target - value) * i) / steps;
-            await page.evaluate(([x, y]) => window.__wt?.move(x, y, 0), [x(m), b.y + b.height / 2] as const);
-            await page.mouse.move(x(m), b.y + b.height / 2);
-            await sleep(45);
-          }
-          await page.mouse.up();
-          pointer = { x: x(target), y: b.y + b.height / 2 };
-          for (let guard = 0; guard < 40; guard++) {
-            const v = Number(await slider.inputValue());
-            if (v === target) break;
-            await slider.press(v < target ? "ArrowRight" : "ArrowLeft");
-          }
-          await waitForTime("17:00");
+          await dragClockTo(17 * 60);
         },
       },
       {
@@ -1230,6 +1241,197 @@ const SCENES: Scene[] = [
   },
 ];
 
+/** The highlights in under two minutes. */
+const SHORT_SCENES: Scene[] = [
+  {
+    title: "Meet Helm",
+    beats: [
+      {
+        say: "This is Helm, an AI chief of staff for a bank CEO who is having an impossible day.",
+        do: async () => {
+          await sleep(1200);
+        },
+      },
+      {
+        say: "It reads every email, Slack message and calendar change as it arrives, and re-plans the day at five key moments.",
+        do: async () => {
+          await page.evaluate(() => window.__wt?.card(null));
+          await sleep(900);
+          await showCaption();
+          const list = left().locator(":scope > ol");
+          await reveal(list, "end", 8, true);
+          await ring(list, 5200, 8);
+          const items = list.locator("li");
+          for (let i = 0; i < 5; i++) {
+            await hover(items.nth(i), 0.3, 0.5);
+            await sleep(450);
+          }
+        },
+      },
+    ],
+  },
+  {
+    title: "08:30 · The morning brief",
+    beats: [
+      {
+        say: "At eight thirty, the brief shows what needs the CEO: three decisions, three meeting clashes, and a fix for each.",
+        do: async () => {
+          await jumpTo("08:30");
+          await ring(phone().locator("header div.flex-wrap"), 4500, 6);
+        },
+      },
+      {
+        say: "It even catches a hidden risk in the CEO's reading: new central bank rules that change the ten thirty call.",
+        do: async () => {
+          const alert = alertCard("Your reading backlog changes the 10:30 call");
+          await reveal(alert, "start", 10);
+          await hover(alert, 0.6, 0.4);
+          await ring(alert, 5500);
+        },
+      },
+    ],
+  },
+  {
+    title: "One-tap calendar fixes",
+    beats: [
+      {
+        say: "Each clash comes with a proposed fix and a drafted message. One tap on Accept, and the calendar updates.",
+        do: async () => {
+          const p = proposal("Move to 11:15-11:45");
+          await reveal(p, "center");
+          await ring(p, 3000);
+          await sleep(2600);
+          await click(p.getByRole("button", { name: "Accept" }));
+          await sleep(600);
+        },
+      },
+    ],
+  },
+  {
+    title: "Decisions only the CEO can make",
+    beats: [
+      {
+        say: "The Decide tab holds only the calls nobody else can make, with options, a recommendation, and a check that there is time before the deadline. Confirm.",
+        do: async () => {
+          await click(tab("Decide"));
+          await sleep(400);
+          const first = card("Ask Maya to cover your scheduling today?");
+          await ring(first, 4400);
+          await sleep(4000);
+          const fit = first.getByText(/min free before 08:45/).last();
+          await hover(fit);
+          await ring(fit, 2400, 5);
+          await sleep(1800);
+          await click(first.getByRole("button", { name: "Confirm" }));
+          await sleep(500);
+        },
+      },
+    ],
+  },
+  {
+    title: "13:16 · A press inquiry",
+    beats: [
+      {
+        say: "At one sixteen, a reporter wants a comment by four. Helm's code check finds no time to make the decision before three.",
+        do: async () => {
+          await click(tab("Today"));
+          await click(left().locator(":scope > ol > li").nth(3).getByRole("button"), 0.3, 0.5);
+          await waitForTime("13:16");
+          const alert = alertCard("No time before 15:00");
+          await reveal(alert, "start", 10);
+          await hover(alert, 0.5, 0.3);
+          await ring(alert, 5000);
+        },
+      },
+      {
+        say: "Make Time fixes it in one tap: a short decision block right now, and the check turns green.",
+        do: async () => {
+          await click(phone().getByRole("button", { name: "Make Time" }));
+          await sleep(1000);
+          const check = right().locator("li").filter({ hasText: /free min before 15:00/ }).first();
+          await hover(check, 0.4, 0.5);
+          await ring(check, 3500, 6);
+        },
+      },
+    ],
+  },
+  {
+    title: "15:12 · The CFO's correction",
+    beats: [
+      {
+        say: "At three twelve, the CFO corrects the numbers, and Helm fixes every affected line of the board one-pager.",
+        do: async () => {
+          await jumpTo("15:12");
+          await click(tab("One-pager"));
+          await sleep(400);
+          const capital = phone().locator("li").filter({ hasText: "$18.6M integration capital" }).first();
+          await reveal(capital, "start", 40);
+          await hover(capital.locator(".strike-old").first(), 0.3, 0.5);
+          await ring(capital, 4500);
+        },
+      },
+    ],
+  },
+  {
+    title: "The same day without Helm",
+    beats: [
+      {
+        say: "Now, the same day without Helm.",
+        do: async () => {
+          await click(mode("Replay the day", "Without Helm"));
+          await dragClockTo(17 * 60);
+        },
+      },
+      {
+        say: "By five o'clock: fifty four unsorted messages, the same three clashes, and no plan.",
+        do: async () => {
+          await click(tab("Today"));
+          await sleep(400);
+          await ring(phone().locator("header"), 4200);
+        },
+      },
+    ],
+  },
+  {
+    title: "Maya's delegate view",
+    beats: [
+      {
+        say: "With Helm, Maya, who is covering the CEO's calendar, gets her own view with only the tasks routed to her.",
+        do: async () => {
+          await click(mode("Replay the day", "With Helm"));
+          await sleep(400);
+          await click(mode("View as", "Maya, delegate"));
+          await sleep(600);
+          await ring(phone().locator("ul").first(), 4000);
+        },
+      },
+    ],
+  },
+  {
+    title: "Helm on a phone",
+    beats: [
+      {
+        say: "And on a phone, Helm fills the whole screen.",
+        do: async () => {
+          await click(mode("View as", "CEO"));
+          await openPhone();
+          await ringBox(frame.locator("div.bg-ink").first(), 2600, 4);
+        },
+      },
+      {
+        say: "Helm reads everything, re-plans at the moments that matter, and leaves the CEO only the calls nobody else can make.",
+        do: async () => {
+          await sleep(1800);
+          await page.evaluate((html) => window.__wt?.card(html), OUTRO_CARD);
+          await sleep(1500);
+        },
+      },
+    ],
+  },
+];
+
+const SCENES = process.env.CUT === "short" ? SHORT_SCENES : FULL_SCENES;
+
 /** A phone-width iframe of the app over the desktop layout, so the responsive layout shows without navigating away. */
 const PHONE_LAYER = `<style>
   #wt-phone{position:fixed;inset:0;z-index:2147483640;background:#f7f7f4;color:#26251e;font-family:var(--font-geist-sans),Inter,system-ui,sans-serif;opacity:0;transition:opacity .6s ease}
@@ -1281,7 +1483,29 @@ interface Frame {
   at: number;
 }
 
+function voiceLength(line: number) {
+  if (!VOICE_CLIPS || FAST) return null;
+  const file = path.join(VOICE_CLIPS, clip(line));
+  if (!existsSync(file)) throw new Error(`Missing voice clip ${file}`);
+  const probe = spawnSync("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", file], { encoding: "utf8" });
+  const seconds = Number(probe.stdout.trim());
+  if (!seconds) throw new Error(`Could not read the length of ${file}`);
+  return seconds;
+}
+
+function writeScript() {
+  mkdirSync(OUT, { recursive: true });
+  const segments = SCENES.flatMap((scene, i) => scene.beats.map((beat) => ({ step: i + 1, stepTitle: scene.title, text: beat.say })));
+  writeFileSync(
+    path.join(OUT, "narration_segments.json"),
+    JSON.stringify({ segments: segments.map((s, i) => ({ line: i + 1, clip: clip(i), ...s })) }, null, 2) + "\n",
+  );
+  const characters = segments.reduce((sum, s) => sum + s.text.length, 0);
+  console.log(`Wrote ${segments.length} lines (${characters} characters) to ${path.join(OUT, "narration_segments.json")}`);
+}
+
 async function main() {
+  if (SCRIPT_ONLY) return writeScript();
   rmSync(OUT, { recursive: true, force: true });
   mkdirSync(path.join(OUT, "frames"), { recursive: true });
 
@@ -1323,7 +1547,8 @@ async function main() {
       for (const beat of scene.beats) {
         const start = clock();
         const words = beat.say.split(/\s+/).length;
-        const minEnd = start + (FAST ? 0.05 : words / WORDS_PER_SECOND + PAUSE_AFTER_LINE);
+        const voiced = voiceLength(lines.length);
+        const minEnd = start + (FAST ? 0.05 : voiced ? voiced + PAUSE_AFTER_CLIP : words / WORDS_PER_SECOND + PAUSE_AFTER_LINE);
         console.log(`[${fmt(start)}] ${i + 1}. ${beat.say.slice(0, 70)}`);
         await beat.do?.();
         const end = Math.max(minEnd, clock() + (FAST ? 0 : 0.35));
@@ -1348,6 +1573,7 @@ async function main() {
   const duration = clock();
   encode(frames, duration);
   writeTranscripts(lines, duration);
+  if (VOICE_CLIPS) cpSync(VOICE_CLIPS, path.join(OUT, "clips"), { recursive: true });
   console.log(`Done: ${fmt(duration)} of video in ${OUT}`);
 }
 
@@ -1406,22 +1632,24 @@ function srtTime(s: number) {
 const mmss = (s: number) => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 const clip = (i: number) => `${String(i + 1).padStart(3, "0")}.mp3`;
 
-/** Splits a line into subtitle-sized pieces, preferring sentence and clause breaks. */
-function subtitleChunks(text: string, max = 14) {
-  const chunks: string[][] = [];
-  let current: string[] = [];
+/** Splits a line into subtitle-sized pieces at clause breaks; longer clauses split evenly. */
+function subtitleChunks(text: string, max = 16) {
+  const clauses: string[][] = [[]];
   for (const word of text.split(/\s+/)) {
-    current.push(word);
-    const sentenceEnd = /[.?!:;]$/.test(word) && current.length >= 4;
-    const clauseEnd = /,$/.test(word) && current.length >= 9;
-    if (current.length >= max || sentenceEnd || clauseEnd) {
-      chunks.push(current);
-      current = [];
-    }
+    clauses[clauses.length - 1].push(word);
+    if (/[.?!:;,]$/.test(word)) clauses.push([]);
   }
-  if (current.length && current.length < 3 && chunks.length) chunks[chunks.length - 1].push(...current);
-  else if (current.length) chunks.push(current);
-  return chunks.map((c) => c.join(" "));
+  const chunks: string[][] = [];
+  for (const clause of clauses.filter((c) => c.length)) {
+    const last = chunks[chunks.length - 1];
+    const fits = last && last.length + clause.length <= max;
+    if (fits && (!/[.?!]$/.test(last[last.length - 1]) || last.length < 4 || clause.length < 3)) last.push(...clause);
+    else chunks.push([...clause]);
+  }
+  return chunks.flatMap((c) => {
+    const size = Math.ceil(c.length / Math.ceil(c.length / max));
+    return Array.from({ length: Math.ceil(c.length / size) }, (_, i) => c.slice(i * size, (i + 1) * size).join(" "));
+  });
 }
 
 function writeTranscripts(lines: Line[], duration: number) {
@@ -1439,8 +1667,12 @@ function writeTranscripts(lines: Line[], duration: number) {
     "",
     `Video: \`helm_walkthrough.mp4\`, 1920x1080, ${mmss(duration)}. Narration: ${lines.length} lines, ${words} words, ${characters.toLocaleString("en-US")} characters.`,
     "",
-    "Each line starts at the timestamp shown and was given enough room for an unhurried read",
-    `(about ${Math.round(WORDS_PER_SECOND * 60)} words per minute plus a short pause), so a typical voice finishes before the next line begins.`,
+    ...(VOICE_CLIPS
+      ? ["Each line starts at the timestamp shown, and every shot was held until its recorded voice clip had finished."]
+      : [
+          "Each line starts at the timestamp shown and was given enough room for an unhurried read",
+          `(about ${Math.round(WORDS_PER_SECOND * 60)} words per minute plus a short pause), so a typical voice finishes before the next line begins.`,
+        ]),
     "",
     "## Using it with ElevenLabs",
     "",

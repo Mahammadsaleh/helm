@@ -9,7 +9,9 @@
     "lint": "eslint",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "qa": "playwright test"
+    "qa": "playwright test",
+    "import:xlsx": "tsx scripts/import-xlsx.ts",
+    "analyze": "tsx --conditions=react-server scripts/analyze.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.71",

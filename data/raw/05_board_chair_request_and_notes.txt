@@ -1,0 +1,43 @@
+BOARD CHAIR REQUEST — RICHARD VOSS
+Ask arrived: 09:05 (email #11), extended 12:10 (email #24)
+Deadline: 17:00 today — Richard's flight is at 19:00
+Format requested: ONE PAGE
+
+RICHARD'S REQUEST
+"Heading into an investor meeting tomorrow morning and want a crisp
+one-pager on Q3 — highlights, risks, and anything the board should know.
+Can you have something for me by 5pm?"
+...then later...
+"Can you also fold the Davr Bank integration status into the Q3 summary?
+Investors will ask about it tomorrow given the size of the deal."
+
+RAW NOTES (pulled from meeting notes across the quarter)
+
+--- from Aug board prep doc ---
+- net interest income up ~22% QoQ, mostly from corporate lending
+- customer attrition ticked up, ~3.1% annualized (was 2.4% last Q) —
+  TechCorp account is part of this
+- IT headcount +6 this quarter, mostly the digital banking team
+- cost-to-income ratio: 52% (from board deck v4)
+
+--- notes from product review 9/15 ---
+new AI assistant in the mobile banking app shipped 2 weeks early, early
+usage strong (40% of eligible customers used it in the first week)
+- one eng lead flagged technical debt in the notification system, "not
+  urgent but growing"
+
+--- notes from sales sync 9/22 ---
+pipeline healthy, Acme corporate loan (mentioned by Marcus this AM) could
+close this quarter, ~$4M facility
+- competitive pressure increasing from a new digital-only bank in SME
+  lending
+
+--- Davr Bank integration status ---
+- $18M integration capital injection, released in two tranches tied to
+  Day-1 and Day-100 milestones — still pending Day-1 sign-off
+- Data Sharing Agreement (DSA) unsigned as of this morning, legal chasing
+  (see inbox #2, #18, #28)
+- CFO flagged 1:40pm that integration terms shifted slightly since this
+  morning
+- Today's Day-1 sign-off call with Davr Bank is at risk — the interpreter
+  cancelled

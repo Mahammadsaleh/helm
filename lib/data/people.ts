@@ -1,0 +1,40 @@
+import type { Person } from "@/lib/types";
+
+const list: Person[] = [
+  { id: "ceo", name: "You", role: "CEO", org: "ABB Super Bank" },
+  { id: "richard", name: "Richard Voss", role: "Board Chair", org: "ABB Super Bank" },
+  { id: "sarah", name: "Sarah", role: "CFO", org: "ABB Super Bank" },
+  { id: "maya", name: "Maya", role: "EA to the CFO", org: "ABB Super Bank" },
+  { id: "marcus", name: "Marcus", role: "Sales", org: "ABB Super Bank" },
+  { id: "priya", name: "Priya", role: "Product & Engineering", org: "ABB Super Bank" },
+  { id: "tom", name: "Tom", role: "Engineering Lead", org: "ABB Super Bank" },
+  { id: "lena", name: "Lena", role: "Client Coverage", org: "ABB Super Bank" },
+  { id: "jordan", name: "Jordan Blake", role: "Comms Lead", org: "ABB Super Bank" },
+  { id: "legal", name: "Legal", role: "General Counsel's Office", org: "ABB Super Bank" },
+  { id: "people", name: "People Team", role: "HR", org: "ABB Super Bank" },
+  { id: "it", name: "IT Service Desk", role: "Internal", org: "ABB Super Bank" },
+  { id: "finance-ops", name: "Finance Operations", role: "Internal", org: "ABB Super Bank" },
+  { id: "ir", name: "Investor Relations", role: "Internal", org: "ABB Super Bank" },
+  { id: "board-sec", name: "Board Secretary", role: "Internal", org: "ABB Super Bank" },
+  { id: "facilities", name: "Facilities", role: "Internal", org: "ABB Super Bank" },
+  { id: "branch-network", name: "Branch Network Team", role: "Internal", org: "ABB Super Bank" },
+  { id: "calendar", name: "Calendar", role: "System", org: "ABB Super Bank" },
+  { id: "zoom", name: "Zoom", role: "System", org: "External" },
+  { id: "banking-daily", name: "Banking Daily", role: "Newsletter", org: "External" },
+  { id: "forum", name: "Central Asia Banking Forum", role: "Events", org: "External" },
+  { id: "vendor", name: "Clearpath Compliance", role: "Vendor", org: "External" },
+  { id: "linkedin", name: "LinkedIn", role: "Notifications", org: "External" },
+  { id: "sam", name: "Sam Reyes", role: "Reporter", org: "TechInsight" },
+  { id: "bekzod", name: "Bekzod Nazarov", role: "Chairman of the Management Board", org: "Davr Bank" },
+  { id: "dilnoza", name: "Dilnoza Rashidova", role: "Deputy Chairman & CFO", org: "Davr Bank" },
+  { id: "nodira", name: "Nodira", role: "Interpreter", org: "External" },
+  { id: "aisha", name: "Aisha", role: "VP Engineering Candidate", org: "External" },
+  { id: "candidate-2", name: "Second Candidate", role: "VP Engineering Candidate", org: "External" },
+  { id: "techcorp", name: "TechCorp", role: "Corporate Client", org: "TechCorp" },
+  { id: "reading", name: "Reading Backlog", role: "Saved Articles", org: "External" },
+  { id: "integration-office", name: "Integration Office", role: "Davr Integration", org: "ABB Super Bank" },
+];
+
+export const PEOPLE: Record<string, Person> = Object.fromEntries(
+  list.map((p) => [p.id, p]),
+);

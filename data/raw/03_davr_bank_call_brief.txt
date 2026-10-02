@@ -1,0 +1,56 @@
+DAVR BANK — DAY-1 INTEGRATION SIGN-OFF CALL
+Scheduled: 10:30–11:15, Zoom
+Status: AT RISK — interpreter cancelled 10:05am (see email #16 in 02_inbox.xlsx)
+
+DEAL CONTEXT
+ABB Super Bank completed its acquisition of Davr Bank (Tashkent, Uzbekistan)
+earlier this year. This call is meant to finalize Day-1 readiness — the
+operational, legal, and branding milestones that need to be locked before
+rebranding and systems cutover can proceed. The board chair has already
+flagged that investors will ask about integration status tomorrow (see
+05_board_chair_request_and_notes.txt).
+
+ATTENDEES
+- Bekzod Nazarov — Chairman of the Management Board, Davr Bank. Comfortable
+  with everyday English from prior international dealings, but has said on
+  earlier calls that fast-paced legal and financial terminology is
+  difficult to follow.
+- Dilnoza Rashidova — Deputy Chairman & CFO, Davr Bank. Limited spoken
+  English; has relied on interpretation for anything beyond small talk on
+  past calls.
+- [Interpreter — Nodira — CANCELLED 10:05am due to illness, no replacement
+  arranged]
+
+OUTSTANDING ITEMS GOING INTO THE CALL
+1. Data Sharing Agreement (DSA) still unsigned on our side (legal has been
+   chasing since 7:55am — see emails #2, #18, #28). Davr Bank's side is
+   now asking about it directly — it's needed before cross-border customer
+   data can be migrated.
+2. Redlined Day-1 integration plan sent by Dilnoza at 8:41am — has not
+   been reviewed yet.
+3. CFO flagged at 1:40pm that integration terms shifted slightly since
+   this morning's board deck — check with legal before finalizing
+   anything in writing.
+
+KEY TERMS UNDER DISCUSSION (from the redline)
+- Integration capital injection: $18M, released in two tranches tied to
+  Day-1 and Day-100 milestones
+- Two seats for Davr Bank leadership on the joint integration steering
+  committee
+- Branch rebranding rollout window: 90 days from Day-1
+- Governing law for the integration agreement: to be confirmed (Davr Bank
+  proposed Uzbek law; our legal countered with our home jurisdiction)
+- Regulatory sign-off from the Central Bank of Uzbekistan still pending
+
+GLOSSARY — TERMS THAT HAVE CAUSED CONFUSION ON PRIOR CALLS
+- "Tranche" — a portion of the integration capital released at a milestone
+- "Day-1 readiness" — the point at which rebranded branches and systems
+  can go live for customers
+- "Regulatory sign-off" — formal approval from the Central Bank of
+  Uzbekistan, required before rebranding can launch
+- "Core banking migration" — the technical cutover of Davr Bank's systems
+  onto the parent group's platform
+- "Retention agreements" — contracts to keep key Davr Bank staff through
+  the transition period
+- "Governing law" — which legal system interprets the integration
+  agreement

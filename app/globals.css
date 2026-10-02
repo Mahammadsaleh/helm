@@ -1,0 +1,181 @@
+@import "tailwindcss";
+
+/*
+ * Tokens follow the Cursor DESIGN.md (getdesign): warm cream canvas, warm ink,
+ * one orange accent, hairline depth, pastel pills reserved for agent activity.
+ * Text tokens are darkened where the originals miss WCAG AA (e.g. white on
+ * #f54e00 is 3.5:1, so filled buttons use --accent-ink at 5.2:1).
+ */
+:root {
+  color-scheme: light;
+  --canvas: #f7f7f4;
+  --canvas-soft: #fafaf7;
+  --card: #ffffff;
+  --surface-strong: #e6e5e0;
+  --ink: #26251e;
+  --body: #4f4d47;
+  --muted: #6b685f;
+  --hairline: #e6e5e0;
+  --hairline-strong: #cfcdc4;
+  --accent: #f54e00;
+  --accent-ink: #c43e00;
+  --on-accent: #ffffff;
+  --accent-soft: #fdebe1;
+  --danger: #c22a50;
+  --danger-soft: #fbe9ee;
+  --success: #1a7a59;
+  --success-soft: #e4f1ea;
+  --warn: #855600;
+  --warn-soft: #fbf1d7;
+  --pill-read: #9fbbe0;
+  --pill-think: #dfa88f;
+  --pill-grep: #9fc9a2;
+  --pill-edit: #c0a8dd;
+  --pill-done: #c08532;
+  --bezel: #1d1c18;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --canvas: #161511;
+    --canvas-soft: #1b1a16;
+    --card: #201f1a;
+    --surface-strong: #2d2b25;
+    --ink: #efeee8;
+    --body: #c9c6bb;
+    --muted: #a19d91;
+    --hairline: #2f2d27;
+    --hairline-strong: #46433b;
+    --accent: #ff6a2b;
+    --accent-ink: #ff8a52;
+    --on-accent: #1a0d05;
+    --accent-soft: #3a2216;
+    --danger: #ff7b97;
+    --danger-soft: #3b1822;
+    --success: #5fd3a6;
+    --success-soft: #153128;
+    --warn: #f1c46a;
+    --warn-soft: #352a10;
+    --pill-read: #6f8fbd;
+    --pill-think: #c0846a;
+    --pill-grep: #6fa274;
+    --pill-edit: #9a80bb;
+    --pill-done: #c08532;
+    --bezel: #050504;
+  }
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-canvas-soft: var(--canvas-soft);
+  --color-card: var(--card);
+  --color-surface-strong: var(--surface-strong);
+  --color-ink: var(--ink);
+  --color-body: var(--body);
+  --color-muted: var(--muted);
+  --color-hairline: var(--hairline);
+  --color-hairline-strong: var(--hairline-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-on-accent: var(--on-accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-pill-read: var(--pill-read);
+  --color-pill-think: var(--pill-think);
+  --color-pill-grep: var(--pill-grep);
+  --color-pill-edit: var(--pill-edit);
+  --color-pill-done: var(--pill-done);
+  --color-bezel: var(--bezel);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-feature-settings: "ss01";
+}
+
+button,
+[role="button"],
+a,
+input,
+label {
+  touch-action: manipulation;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.scroll-area {
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hairline-strong) transparent;
+}
+
+.strike-old {
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in oklab, var(--danger) 70%, transparent);
+  text-decoration-thickness: 1.5px;
+}
+
+input[type="range"].clock {
+  appearance: none;
+  height: 28px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"].clock::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--hairline-strong);
+}
+input[type="range"].clock::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--hairline-strong);
+}
+input[type="range"].clock::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -7px;
+  border-radius: 999px;
+  background: var(--card);
+  border: 2px solid var(--accent);
+}
+input[type="range"].clock::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--card);
+  border: 2px solid var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

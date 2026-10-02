@@ -1,0 +1,40 @@
+JOURNALIST INQUIRY — SAM REYES, TECHINSIGHT
+Received: 13:00 (see also email #25 in 02_inbox.xlsx)
+Deadline: 16:00 today
+Status: Comms team has a draft statement ready for CEO approval (email #26,
+13:15) and a final version pending sign-off (email #32, 16:45)
+
+FULL EMAIL FROM SAM REYES
+
+Subject: Requesting comment: sources say layoffs planned
+
+Hi,
+
+I'm a reporter with TechInsight covering banking and fintech.
+I'm working on a story citing two sources familiar with the matter who say
+ABB Super Bank is planning to lay off approximately 15% of staff in the coming
+weeks, reportedly tied to a restructuring of its digital banking unit.
+
+I'd like to give you the opportunity to comment or provide a statement
+before we publish. A few specific questions:
+
+1. Can you confirm or deny that layoffs are planned?
+2. If layoffs are happening, what is the scale and timeline?
+3. Is this related to the digital banking restructuring reported earlier
+   this year?
+
+I'm working on a tight deadline and would need a response by 4:00pm today
+to include it in the story. Happy to jump on a call if that's easier.
+
+Best,
+Sam Reyes
+TechInsight
+
+INTERNAL CONTEXT
+- No layoffs are currently planned. The rumor appears to stem from a
+  misread of an internal reorg announced last month (team restructuring,
+  not headcount reduction).
+- Comms lead Jordan Blake has already drafted a statement (see inbox #26)
+  and a "final" version (#32) that would go out at 5pm by default if the
+  CEO doesn't weigh in.
+- The CEO has back-to-back meetings until 4:30pm.

@@ -93,6 +93,27 @@ pnpm qa          # Playwright on desktop and mobile: the five-moment walkthrough
 
 `pnpm qa` starts the dev server if one is not already running and saves screenshots to `qa/screenshots`.
 
+## Walkthrough video
+
+```bash
+pnpm build && pnpm start --port 3100
+BASE_URL=http://localhost:3100 OUT=/tmp/helm-walkthrough pnpm walkthrough
+ELEVENLABS_API_KEY=... ELEVENLABS_VOICE_ID=... pnpm narrate /tmp/helm-walkthrough
+```
+
+`pnpm walkthrough` drives the app through every feature in 16 steps and writes a 1920x1080 MP4 with a visible cursor, highlights and step captions. Next to it go a narration script timed to the video (`transcript.md`, `transcript.srt`, `narration.txt`, `narration_segments.csv` and `.json`) and a copy of `narrate.mjs`. Set `FAST=1` to check the flow without recording. The script used for the current video is in `docs/walkthrough-transcript.md`.
+
+`pnpm narrate` voices each line with ElevenLabs, places every clip at its start time and writes `helm_walkthrough_narrated.mp4`, `narration.m4a` and `transcript_narrated.srt`. Clips land in `clips/001.mp3`, `002.mp3`, … and are reused on the next run. Without an API key it mixes clips you saved there yourself. A clip longer than its slot is sped up just enough to fit.
+
+`CUT=short` records the highlights in under two minutes. To time every shot to the real voice, make the clips first:
+
+```bash
+CUT=short SCRIPT_ONLY=1 OUT=/tmp/helm-voice pnpm walkthrough
+ELEVENLABS_API_KEY=... pnpm narrate /tmp/helm-voice --clips-only
+CUT=short VOICE_CLIPS=/tmp/helm-voice/clips OUT=/tmp/helm-short pnpm walkthrough
+pnpm narrate /tmp/helm-short
+```
+
 ## Design
 
 - Tokens come from the Cursor design analysis in `DESIGN.md`: a cream canvas, warm ink, one orange accent, hairline borders, and pastel pills reserved for agent activity. Text colours are darkened where the originals fail WCAG AA.
@@ -111,6 +132,7 @@ lib/engine/          deterministic planning and checks
 lib/ai/              schema, prompt, model provider
 lib/seed/            bundled analysis per checkpoint
 lib/import/          spreadsheet row mapping
-scripts/             import-xlsx, analyze
+scripts/             import-xlsx, analyze, record-walkthrough, narrate-walkthrough
 tests/ qa/           unit tests, Playwright QA
+docs/                walkthrough narration script
 ```

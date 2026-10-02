@@ -16,13 +16,13 @@
  * Needs Node 18+ and ffmpeg.
  */
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const API_KEY = process.env.ELEVENLABS_API_KEY;
-/** "George", the voice used in the ElevenLabs quickstart. */
-const VOICE_ID = process.env.ELEVENLABS_VOICE_ID ?? "JBFqnCBsd6RMkjVDRZzb";
+/** "Rachel", a calm American narration voice from the ElevenLabs default set. */
+const VOICE_ID = process.env.ELEVENLABS_VOICE_ID ?? "21m00Tcm4TlvDq8ikWAM";
 const MODEL_ID = process.env.ELEVENLABS_MODEL_ID ?? "eleven_multilingual_v2";
 /** Silence kept between the end of one line and the start of the next. */
 const GAP = 0.15;
@@ -65,6 +65,22 @@ function findClip(segment) {
 }
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** Generated clips often end in up to a second of silence, which would hold each shot too long. */
+function trimTail(file) {
+  const { stderr } = spawnSync("ffmpeg", ["-nostdin", "-hide_banner", "-i", file, "-af", "silencedetect=noise=-45dB:d=0.3", "-f", "null", "-"], {
+    encoding: "utf8",
+  });
+  const starts = [...stderr.matchAll(/silence_start: ([0-9.]+)/g)].map((m) => Number(m[1]));
+  const ends = [...stderr.matchAll(/silence_end: ([0-9.]+)/g)].map((m) => Number(m[1]));
+  const length = probeDuration(file);
+  const last = starts.at(-1);
+  const reachesEnd = ends.length < starts.length || ends.at(-1) >= length - 0.06;
+  if (last == null || !reachesEnd || length - last < 0.35) return;
+  const trimmed = `${file}.trim.mp3`;
+  run("ffmpeg", ["-nostdin", "-y", "-loglevel", "error", "-i", file, "-t", (last + 0.15).toFixed(3), "-c:a", "libmp3lame", "-b:a", "192k", trimmed]);
+  renameSync(trimmed, file);
+}
 
 async function speak(segments, i) {
   const body = { text: segments[i].text, model_id: MODEL_ID };
@@ -143,6 +159,7 @@ async function main() {
     for (const segment of missing) {
       const audio = await speak(segments, segments.indexOf(segment));
       writeFileSync(path.join(clipsDir, segment.clip), audio);
+      trimTail(path.join(clipsDir, segment.clip));
       process.stdout.write(`  ${segment.clip}  ${segment.text.slice(0, 70)}\n`);
     }
   }

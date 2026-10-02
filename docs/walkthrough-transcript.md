@@ -1,6 +1,6 @@
 # Helm product walkthrough: narration script
 
-Video: `helm_walkthrough.mp4`, 1920x1080, 01:39. Narration: 14 lines, 250 words, 1,359 characters.
+Video: `helm_walkthrough.mp4`, 1920x1080, 01:42. Narration: 14 lines, 250 words, 1,359 characters.
 
 Each line starts at the timestamp shown, and every shot was held until its recorded voice clip had finished.
 
@@ -19,14 +19,14 @@ Each line starts at the timestamp shown, and every shot was held until its recor
 | Step | Starts | Title |
 | ---: | :---: | --- |
 | 1 | 00:00 | Meet Helm |
-| 2 | 00:13 | 08:30 · The morning brief |
-| 3 | 00:29 | One-tap calendar fixes |
-| 4 | 00:37 | Decisions only the CEO can make |
-| 5 | 00:47 | 13:16 · A press inquiry |
-| 6 | 01:02 | 15:12 · The CFO's correction |
-| 7 | 01:10 | The same day without Helm |
-| 8 | 01:20 | Maya's delegate view |
-| 9 | 01:27 | Helm on a phone |
+| 2 | 00:14 | 08:30 · The morning brief |
+| 3 | 00:30 | One-tap calendar fixes |
+| 4 | 00:39 | Decisions only the CEO can make |
+| 5 | 00:50 | 13:16 · A press inquiry |
+| 6 | 01:04 | 15:12 · The CFO's correction |
+| 7 | 01:11 | The same day without Helm |
+| 8 | 01:21 | Maya's delegate view |
+| 9 | 01:28 | Helm on a phone |
 
 ## Step 1: Meet Helm
 
@@ -35,36 +35,36 @@ Each line starts at the timestamp shown, and every shot was held until its recor
 
 ## Step 2: 08:30 · The morning brief
 
-3. `[00:13]` At eight thirty, the brief shows what needs the CEO: three decisions, three meeting clashes, and a fix for each.
+3. `[00:14]` At eight thirty, the brief shows what needs the CEO: three decisions, three meeting clashes, and a fix for each.
 4. `[00:22]` It even catches a hidden risk in the CEO's reading: new central bank rules that change the ten thirty call.
 
 ## Step 3: One-tap calendar fixes
 
-5. `[00:29]` Each clash comes with a proposed fix and a drafted message. One tap on Accept, and the calendar updates.
+5. `[00:30]` Each clash comes with a proposed fix and a drafted message. One tap on Accept, and the calendar updates.
 
 ## Step 4: Decisions only the CEO can make
 
-6. `[00:37]` The Decide tab holds only the calls nobody else can make, with options, a recommendation, and a check that there is time before the deadline. Confirm.
+6. `[00:39]` The Decide tab holds only the calls nobody else can make, with options, a recommendation, and a check that there is time before the deadline. Confirm.
 
 ## Step 5: 13:16 · A press inquiry
 
-7. `[00:47]` At one sixteen, a reporter wants a comment by four. Helm's code check finds no time to make the decision before three.
-8. `[00:55]` Make Time fixes it in one tap: a short decision block right now, and the check turns green.
+7. `[00:50]` At one sixteen, a reporter wants a comment by four. Helm's code check finds no time to make the decision before three.
+8. `[00:58]` Make Time fixes it in one tap: a short decision block right now, and the check turns green.
 
 ## Step 6: 15:12 · The CFO's correction
 
-9. `[01:02]` At three twelve, the CFO corrects the numbers, and Helm fixes every affected line of the board one-pager.
+9. `[01:04]` At three twelve, the CFO corrects the numbers, and Helm fixes every affected line of the board one-pager.
 
 ## Step 7: The same day without Helm
 
-10. `[01:10]` Now, the same day without Helm.
-11. `[01:14]` By five o'clock: fifty four unsorted messages, the same three clashes, and no plan.
+10. `[01:11]` Now, the same day without Helm.
+11. `[01:15]` By five o'clock: fifty four unsorted messages, the same three clashes, and no plan.
 
 ## Step 8: Maya's delegate view
 
-12. `[01:20]` With Helm, Maya, who is covering the CEO's calendar, gets her own view with only the tasks routed to her.
+12. `[01:21]` With Helm, Maya, who is covering the CEO's calendar, gets her own view with only the tasks routed to her.
 
 ## Step 9: Helm on a phone
 
-13. `[01:27]` And on a phone, Helm fills the whole screen.
-14. `[01:31]` Helm reads everything, re-plans at the moments that matter, and leaves the CEO only the calls nobody else can make.
+13. `[01:28]` And on a phone, Helm fills the whole screen.
+14. `[01:32]` Helm reads everything, re-plans at the moments that matter, and leaves the CEO only the calls nobody else can make.
